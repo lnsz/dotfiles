@@ -105,25 +105,79 @@ source $ZSH/oh-my-zsh.sh
 setxkbmap -option caps:escape
 xbindkeys
 
+#################
 # Aliases
-alias pms="sudo pacman -S"
-alias pml="pacman -Qqe"
-alias pmu="sudo pacman -Syu"
-alias home="cd ~"
-alias dev="cd ~/dev"
-alias devium="cd ~/dev/devium"
-alias rdq="cd ~/dev/rdq"
-alias dl="cd ~/Downloads"
-alias zr="vim ~/.zshrc"
-alias vr="vim ~/.vimrc"
-alias zrs="source ~/.zshrc"
-alias vrs="source ~/.vimrc"
-alias gitf="git add --all && echo ':wq' | git commit --amend && git push --force"
-alias dil="docker image list"
-alias dcl="docker container list -a"
+#################
+# Pacman
+alias pms='sudo pacman -S'
+alias pml='pacman -Qqe'
+alias pmu='sudo pacman -Syu'
+# Paths
+alias home='cd ~'
+alias dev='cd ~/dev'
+alias devium='cd ~/dev/devium'
+alias manager='cd ~/dev/devium/devium-manager'
+alias worker='cd ~/dev/devium/devium-worker'
+alias appium='cd ~/dev/devium/devium-appium'
+alias selenium='cd ~/dev/devium/devium-selenium'
+alias hub='cd ~/dev/devium/devium-hub'
+alias studio='cd ~/dev/devium/devium-studio'
+alias rdq='cd ~/dev/rdq'
+alias dl='cd ~/Downloads'
+# Dotfiles
+alias .zsh='vim ~/.zshrc'
+alias .vim='vim ~/.vimrc'
+alias .i3='vim ~.3/config'
+alias szsh='source ~/.zshrc'
+alias svim='source ~/.vimrc'
+# Git
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gpl='git pull'
+alias gps='git push'
+# Docker
+alias dsock='chmod 777 /var/run/docker.sock'
+alias dil='docker image list'
+alias dcl='docker container list -a'
+alias dvl='docker volume list'
 alias dcp="echo 'y' | docker container prune"
 alias dip="echo 'y' | docker image prune"
+alias dex='docker exec -it'
+alias dirm='docker image rm'
+alias dcs='docker container stop'
+alias dstop='docker stop $(docker ps -a -q)'
+alias dkill='docker stop $(docker ps -a -q)'
+alias drm='docker rm $(docker ps -a -q)'
+alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+alias alpine='docker run --name alpine ruby:alpine tail -f /dev/null'
+# Other
 alias pid="sudo rm tmp/pids/server.pid"
+
+# Functions
+function gitf() {
+  git add --all
+  echo ':wq' | git commit --amend
+  git push --force
+}
+function gitr() {
+  branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+  git stash
+  git checkout -b 'temp'
+  git branch -D "$branch"
+  git fetch
+  git checkout "$branch"
+  git branch -D 'temp'
+}
+function dk() {
+  docker stop "$1"
+  docker rm "$1"
+}
+function dbu() {
+  docker build -t="$1" .
+}
+function localhost() {
+  echo "$(/sbin/ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | tail -1)"
+}
 
 DEFAULT_USER=$(whoami)
 VISUAL=vim

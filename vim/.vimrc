@@ -7,6 +7,8 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-surround' 
 Plug 'terryma/vim-multiple-cursors'
 Plug 'haya14busa/incsearch.vim'
+Plug 'maksimr/vim-jsbeautify'
+Plug 'othree/html5.vim'
 
 call plug#end()
 
@@ -25,10 +27,6 @@ map *  <Plug>(incsearch-nohl-*)
 map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
-vnoremap <C-c> y: call system("xclip -i", getreg("\""))<CR>
-noremap <C-V> :r !xclip -o <CR>
-noremap <Up> :echo "use 'k'"<CR>
-noremap <Down> :echo "use 'h'"<CR>
 noremap <Left> b
 noremap <Right> w
 set number relativenumber

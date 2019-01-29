@@ -3,7 +3,7 @@
 PATH=$PATH:~/dev/devium
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/lucas/.oh-my-zsh"
+export ZSH="/home/lucas/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -58,7 +58,7 @@ POWERLEVEL9K_MODE="nerdfont-complete"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# ZSH_CUSTOM=/p ath/to/new-custom-folder
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -74,7 +74,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
+PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -102,8 +102,6 @@ source $ZSH/oh-my-zsh.sh
 #
 
 # Key binds
-setxkbmap -option caps:escape
-xbindkeys
 
 #################
 # Aliases
@@ -123,7 +121,9 @@ alias selenium='cd ~/dev/devium/devium-selenium'
 alias hub='cd ~/dev/devium/devium-hub'
 alias studio='cd ~/dev/devium/devium-studio'
 alias rdq='cd ~/dev/rdq'
-alias dl='cd ~/Downloads'
+alias redmine='cd ~/dev/redmine-docker/redmine'
+alias plugins='cd ~/dev/redmine-docker/redmine/plugins'
+alias dl='cd ~/downloads'
 # Dotfiles
 alias .zsh='vim ~/.zshrc'
 alias .vim='vim ~/.vimrc'
@@ -135,8 +135,11 @@ alias gco='git checkout'
 alias gcb='git checkout -b'
 alias gpl='git pull'
 alias gps='git push'
+alias gs='git status'
+alias gl='git log'
+alias gd='git diff'
 # Docker
-alias dsock='chmod 777 /var/run/docker.sock'
+alias dsock='sudo chmod 777 /var/run/docker.sock'
 alias dil='docker image list'
 alias dcl='docker container list -a'
 alias dvl='docker volume list'
@@ -145,13 +148,24 @@ alias dip="echo 'y' | docker image prune"
 alias dex='docker exec -it'
 alias dirm='docker image rm'
 alias dcs='docker container stop'
+alias dck='docker container kill'
+alias dcr='docker container rm'
 alias dstop='docker stop $(docker ps -a -q)'
-alias dkill='docker stop $(docker ps -a -q)'
-alias drm='docker rm $(docker ps -a -q)'
+alias dkill='docker kill $(docker ps -a -q)'
+alias dcrm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
-alias alpine='docker run --name alpine ruby:alpine tail -f /dev/null'
+alias alpine='docker kill alpine; docker rm alpine; docker run --name alpine ruby:alpine tail -f /dev/null'
+# Keyboard
+alias qwerty="setxkbmap us"
+alias colemak="setxkbmap us -variant colemak && xmodmap -e 'keycode 66 = BackSpace'"
+# Monitor
+alias monitor="xrandr --output eDP1 --auto --output DVI-I-1-1 --auto --left-of eDP1 --output DVI-I-2-2 --auto --left-of DVI-I-1-1"
 # Other
 alias pid="sudo rm tmp/pids/server.pid"
+alias rdq_dev="cd ~/dev/rdq && dk rdq; dk rdq_db; dk rdq_nginx; DB_USER=root DB_PASSWORD=1234 ./docker/scripts/start.sh --env development"
+alias redmine_dev="cd ~/dev/redmine && dk redmine; dk redmine_db; dk redmine_nginx; DB_USER=root DB_PASSWORD=1234 ./docker/scripts/start.sh --env development"
+# Scripts
+alias committer='~/scripts/switch_committer.sh'
 
 # Functions
 function gitf() {
@@ -169,7 +183,7 @@ function gitr() {
   git branch -D 'temp'
 }
 function dk() {
-  docker stop "$1"
+  docker kill "$1"
   docker rm "$1"
 }
 function dbu() {

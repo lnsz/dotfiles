@@ -139,14 +139,17 @@ alias gs='git status'
 alias gl='git log'
 alias gd='git diff'
 # Docker
+alias dl='docker logs'
 alias dsock='sudo chmod 777 /var/run/docker.sock'
 alias dil='docker image list'
 alias dcl='docker container list -a'
 alias dvl='docker volume list'
 alias dcp="echo 'y' | docker container prune"
 alias dip="echo 'y' | docker image prune"
+alias dvp="echo 'y' | docker volume prune"
 alias dex='docker exec -it'
 alias dirm='docker image rm'
+alias dvrm='docker volume rm'
 alias dcs='docker container stop'
 alias dck='docker container kill'
 alias dcr='docker container rm'
@@ -155,8 +158,19 @@ alias dkill='docker kill $(docker ps -a -q)'
 alias dcrm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias alpine='docker kill alpine; docker rm alpine; docker run --name alpine ruby:alpine tail -f /dev/null'
+# Kubernetes
+alias kubectl='kubectl --insecure-skip-tls-verify'
+alias kubelab='kubectl config --kubeconfig=config set-cluster lab && kubectl config use-context kubernetes-lab'
+alias kubeprod='kubectl config --kubeconfig=config set-cluster production && kubectl config use-context kubernetes-ops'
+alias kgp='kubectl get pods -o wide --show-labels'
+alias kgd='kubectl get deployment'
+alias kgs='kubectl get service'
+alias kgi='kubectl get ingress'
+alias kdp='kubectl describe pods'
+alias kex='kubectl exec -it'
 # Keyboard
 alias qwerty="setxkbmap us"
+alias qwfpgj="setxkbmap us"
 alias colemak="setxkbmap us -variant colemak && xmodmap -e 'keycode 66 = BackSpace'"
 # Monitor
 alias monitor="xrandr --output eDP1 --auto --output DVI-I-1-1 --auto --left-of eDP1 --output DVI-I-2-2 --auto --left-of DVI-I-1-1"
@@ -191,6 +205,12 @@ function dbu() {
 }
 function localhost() {
   echo "$(/sbin/ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | tail -1)"
+}
+function kl() {
+  kubectl logs -l app="$1" -f
+}
+function ks() {
+  kubectl scale deployment "$1" --replicas="$2"
 }
 
 DEFAULT_USER=$(whoami)
